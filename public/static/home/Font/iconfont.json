@@ -1,0 +1,37 @@
+{
+  "id": "1842848",
+  "name": "agent",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "6501235",
+      "name": "对",
+      "font_class": "icon--yes",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "593506",
+      "name": "右",
+      "font_class": "weibiaoti34",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "1841798",
+      "name": "左",
+      "font_class": "zuo",
+      "unicode": "e68f",
+      "unicode_decimal": 59023
+    },
+    {
+      "icon_id": "14927575",
+      "name": "左",
+      "font_class": "zuo-copy",
+      "unicode": "e690",
+      "unicode_decimal": 59024
+    }
+  ]
+}

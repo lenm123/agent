@@ -1,0 +1,246 @@
+                               add_to_find.html 添加商品文件:
+                                  
+	                           <div class="attribute_img">
+							   	  <div class="attr_img_div">白色</div>
+								  <a href="javascript:;" class="attr_img_a">上传图片</a>
+								  <blockquote class="layui-elem-quote layui-quote-nm" style="width:80%;margin-top:10px;">
+                                     预览图：
+                                     <div class="layui-upload-list" id="demo_img2"></div>
+                                  </blockquote>
+							   </div>
+							   <div class="attribute_img">
+								  <div class="attr_img_div">白色</div>
+								  <a href="javascript:;" class="attr_img_a">上传图片</a>
+								  <blockquote class="layui-elem-quote layui-quote-nm" style="width:80%;margin-top:10px">
+                                     预览图：
+                                     <div class="layui-upload-list" id="demo_img2"></div>
+                                  </blockquote>
+							   </div>
+	                           <div class="table_attr" style="">
+							      <hr/>
+								  <table class="table_ul layui-table">
+								     <thead>
+									    <th>颜色</th>
+									    <th>本店价</th>
+									    <th>库存</th>
+										<th>商品货号</th>
+									 </thead>
+									 <tbody>
+									    <tr>
+										   <td>黑色</td>
+										   <td><input type="text"></td>
+										   <td><input type="text"></td>
+										   <td><input type="text"></td>
+										</tr>
+									 </tbody>
+								  </table>
+							   </div>
+	                           <div>
+							      <label style="position:absolute;font-weight:600;left:187px;font-size:14px;">商品属性 : </label>
+							      <div style="margin:15px 215px;">
+							         <label style="position:absolute;font-weight:600">选择属性 : </label>
+								     <div style="position:relative;left:80px;top:0px;">
+								        <input type='checkbox' name='ci_goods[]' lay-skin="primary" title="M">
+									    <input type='checkbox' name='ci_goods[]' lay-skin="primary" title="L">
+								     </div>
+							      </div>
+                                  <div style="margin:15px 215px;">
+							         <label style="position:absolute;line-height:40px;font-weight:600">选择属性 : </label>
+								     <div style="position:relative;left:80px;top:0px;">
+								         <input type="text" name="" autocomplete="off" class="layui-input" style="width:32.1%">
+								     </div>
+							      </div>
+                               </div>
+
+							   <div>
+							      <label style="position:absolute;font-weight:600;left:187px;font-size:14px;">商品规格 : </label>
+							      <div style="margin:15px 215px;">
+							         <label style="position:absolute;font-weight:600">选择属性 : </label>
+								     <div style="position:relative;left:80px;top:0px;">
+								        <input type='checkbox' name='ci_goods[]' lay-skin="primary" title="M">
+									    <input type='checkbox' name='ci_goods[]' lay-skin="primary" title="L">
+								     </div>
+							      </div>
+                                  <div style="margin:15px 215px;">
+							         <label style="position:absolute;line-height:40px;font-weight:600">选择属性 : </label>
+								     <div style="position:relative;left:80px;top:0px;">
+								         <input type="text" name="" autocomplete="off" class="layui-input" style="width:32.1%">
+								     </div>
+							      </div>
+                               </div>	
+
+							   生成表格和图片旧代码
+     <script>
+	 for( i in datas[arrs[0]]){
+	   	if(arrs.length > 1){
+           //获取数组第二位数据，确保不循环本条数据
+		   for( j=1; j<arrs.length;j++ ){
+			  if( datas[arrs[j]].length > 0 ){
+		         for( k in datas[arrs[j]] ){ 
+				    $(".table_attr").css('display','block');
+				    str += "<tr>";
+			        str += "<td><input type='hidden' name='attr[]' value='"+datas[arrs[0]][da]+","+datas[arrs[j]][k]+"'><input type='hidden' name='attr_id[]' value='"+arrs[0]+","+arrs[j]+"'>";
+					str += ""+datas[arrs[0]][da]+","+datas[arrs[j]][k]+"</td>";
+				    str += "<td><input type='text' name='ci_price[]' value='0.00' class='layui-input'></td>";
+					str += "<td><input type='text' name='ci_rate[]' class='layui-input'></td>";
+				    str += "<td><input type='text' name='ci_stock[]' class='layui-input'></td>";
+				    str += "<td><input type='text' name='ci_number[]' class='layui-input'></td>";
+				    str += "</tr>";
+                    
+					attr_img += '<div class="attribute_img">';
+					attr_img += '<div class="attr_img_div" title="'+datas[arrs[0]][da]+","+datas[arrs[j]][k]+'">'+datas[arrs[0]][da]+","+datas[arrs[j]][k]+'</div>';
+					attr_img += '<a href="javascript:;" class="attr_img_a">上传图片</a>';
+					attr_img += '<input type="hidden" name="img_id[]" value="'+das+'">';
+				    attr_img += '<blockquote class="layui-elem-quote layui-quote-nm" style="width:95%;margin-top:10px;display:none;border-left: 5px solid #009688">';
+					attr_img += '预览图：<div class="layui-upload-list" class="attribute_img2"></div>';
+					attr_img += '</blockquote></div>';
+					das++;
+			     }
+			  }else{
+			     $(".table_attr").css('display','block');
+		         str += "<tr>";
+		         str += "<td><input type='hidden' name='attr[]' value='"+datas[arrs[0]][da]+"'><input type='hidden' name='attr_id[]' value='"+arrs[0]+"'>"+datas[arrs[0]][da]+"</td>";
+		         str += "<td><input type='text' name='ci_price[]' value='0.00' class='layui-input'></td>";
+				 str += "<td><input type='text' name='ci_rate[]' class='layui-input'></td>";
+		         str += "<td><input type='text' name='ci_stock[]' class='layui-input'></td>";
+		         str += "<td><input type='text' name='ci_number[]' class='layui-input'></td>";
+		         str += "</tr>";
+
+				 attr_img += '<div class="attribute_img">';
+				 attr_img += '<div class="attr_img_div"title="'+datas[arrs[0]][da]+'">'+datas[arrs[0]][da]+'</div>';
+				 attr_img += '<a href="javascript:;" class="attr_img_a">上传图片</a>';
+                 attr_img += '<input type="hidden" name="img_id[]" value="'+da+'">';
+				 attr_img += '<blockquote class="layui-elem-quote layui-quote-nm" style="width:95%;margin-top:10px;display:none;border-left: 5px solid #009688">';
+				 attr_img += '预览图：<div class="layui-upload-list" class="attribute_img2"></div>';
+				 attr_img += '</blockquote></div>';
+			  }
+		   }
+		}else{
+		   $(".table_attr").css('display','block');
+		   str += "<tr>";
+		   str += "<td><input type='hidden' name='attr[]' value='"+datas[arrs[0]][da]+"'><input type='hidden' name='attr_id[]' value='"+arrs[0]+"'>"+datas[arrs[0]][da]+"</td>";
+		   str += "<td><input type='text' name='ci_price[]' value='0.00' class='layui-input'></td>";
+		   str += "<td><input type='text' name='ci_rate[]' class='layui-input'></td>";
+		   str += "<td><input type='text' name='ci_stock[]' class='layui-input'></td>";
+		   str += "<td><input type='text' name='ci_number[]' class='layui-input'></td>";
+		   str += "</tr>";
+
+		   attr_img += '<div class="attribute_img">';
+		   attr_img += '<div class="attr_img_div"title="'+datas[arrs[0]][da]+'">'+datas[arrs[0]][da]+'</div>';
+		   attr_img += '<a href="javascript:;" class="attr_img_a">上传图片</a>';
+		   attr_img += '<input type="hidden" name="img_id[]" value="'+da+'">';
+		   attr_img += '<blockquote class="layui-elem-quote layui-quote-nm" style="width:95%;margin-top:10px;display:none;border-left: 5px solid #009688">';
+		   attr_img += '预览图：<div class="layui-upload-list" class="attribute_img2"></div>';
+		   attr_img += '</blockquote></div>';
+		}
+		da++;
+	 }
+
+	 //旧代码区，这里有一段可以插入的旧代码
+	 //查看当前商品属性ID是否以保存在cation中
+	 /*for(var i=0; i<cation.length; i++){
+		//若cation中存在这个id，则给id重新赋值，cation_bool设为false
+	    if(cation[i] == id){
+		   id = i;
+           cation_bool = false;
+		}
+	 }*/
+	 //cation_bool内没有id，为true，给cation_bool数组添加id
+	 /*if(cation_bool){
+	    cation.push(id);
+		//添加后给id从新赋值，id等于datas下标
+		id = subscript;
+		subscript++;
+	 }*/
+	 //当checked_bool转化为布尔值为true时，checked_bool等于当前点击的id
+	 //checked_bool为true，证明当前点击域内没有选中的选项
+	 /*if(checked_bool){
+	    for (var i=0; i<cation.length; i++)
+	    {    
+			//找到cation内等于checked_bool的值删除
+			if(cation[i] == checked_bool){
+			   cation.splice(i,1);
+			}
+	    }
+	 }*/
+	 //alert($(this).parent('div').prev('label').text());
+	 </script>
+	 
+/* redis */
+   function cz(){
+	 $redis = new \Redis();
+	 $redis->connect('localhost',6379);
+	 $redis->auth('5238');
+
+	 $redis->set('a',1);
+   }
+
+   function reds(){
+	  
+     return $this->fetch();
+   }
+
+   /* 分类列表的推进操作 */
+   <!--<span style="margin-left:20px;">
+		{{#if (d.f_mmend == 1) { }}
+		<button type="button" title="现推荐" class="layui-btn layui-btn-sm" lay-submit lay-filter="moren" value="{{ d.f_mmend }}">推荐</button>
+		{{# }else if(d.f_mmend == 2){ }}
+		<button type="button" title="现重点推荐" class="layui-btn layui-btn-sm" lay-submit lay-filter="moren" value="{{ d.f_mmend }}">重点推荐</button>
+		{{# }else{}}
+		<button type="button" title="现未推荐" class="layui-btn layui-btn-sm" lay-submit lay-filter="moren" style="background:#fbfbfb;color:#c9c9c9;" value="{{ d.f_mmend }}">默认</button>
+	    {{# } }}
+		</span>-->
+		//js代码
+		form.on("submit(moren)",function(data){
+		   var id = $(this).parents('tr').first().find('td').eq(1).text();
+		   id = id.replace(/\s*/g,"");
+           var value = $(this).val();
+
+		   if(value == 1){
+		      layer.confirm('添加至重点推荐 还是恢复到默认？', {
+                 btn:['重点推荐','恢复默认','取消'],
+                 btn1:function(){
+					 value = 2;
+					 mmend_ajax(id,value);
+					 layer.closeAll();
+			     }, 
+                 btn2:function(){
+					 value = 0;
+					 mmend_ajax(id,value);
+					 layer.closeAll();
+			     }, 
+			     btn3:function(){return;}
+              })  
+		   }else if(value == 2){
+		      layer.confirm('恢复至推荐 还是默认？', {
+                 btn:['推荐','默认','取消'],
+                 btn1:function(){
+					 value = 1;
+					 mmend_ajax(id,value);
+					 layer.closeAll();
+			     }, 
+                 btn2:function(){
+					 value = 0;
+					 mmend_ajax(id,value);
+					 layer.closeAll();
+			     }, 
+			     btn3:function(){return;}
+              })  
+		   }else{
+		      value = 1;
+			  mmend_ajax(id,value);
+		   }
+		});
+
+		window.mmend_ajax = function(id,value){
+			$.ajax({
+		      type:'POST',
+              url:"/admin.php/fenlei/member_mmend",
+			  data:{f_id:id,f_mmend:value},
+			  dataType:'json',
+			  success:function(res){
+				 if(res.status == 'ok'){
+				    renderTable();
+				 }
+			  }
+		    });}
