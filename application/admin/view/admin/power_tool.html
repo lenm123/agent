@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>权限归属 操作</title>
+        {include file="public/childhead"}
+		<style>
+		   .layui-unselect dl { max-height:150px; }
+		   .layui-form-label {width:50px;}
+           .layui-input-block {margin-left: 80px;min-height: 36px;}
+ 		</style>
+    </head>
+    <body style="background:#fff;">
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <form class="layui-form" style="margin-top:20px;">                    
+                    <div class="layui-form-item">						
+						<div class="layui-input-inline">
+                            <label for="L_username" class="layui-form-label">
+                                <span class="x-red">*</span> 操作名
+							</label>
+                            <div class="layui-input-block" style="width:100%;">
+                                <input type="text" name="s_name" lay-verify="nikename" autocomplete="off" class="layui-input" value="{$res.s_name | default=''}" placeholder="例: 系统配置添加"/>
+						    </div>
+						</div>
+                    </div>
+					<div class="layui-form-item">						
+						<div class="layui-input-inline">
+                            <label for="L_username" class="layui-form-label">
+                                <span class="x-red">*</span> 地址
+							</label>
+                            <div class="layui-input-block" style="width:100%;">
+                                <input type="text" name="s_address" lay-verify="nikename2" autocomplete="off" class="layui-input" value="{$res.s_address | default=''}" placeholder="例: admin/index"/>
+						    </div>
+						</div>
+                    </div>
+					<div class="layui-form-item">						
+						<div class="layui-input-inline">
+                            <label for="L_username" class="layui-form-label">
+                                <span class="x-red">*</span> 列表
+							</label>
+                            <div class="layui-input-block" style="width:100%;">
+                                <select name="sy_id" lay-verify="nikename3">
+								    <option value=''>请选择</option>
+								    {foreach $data as $v}
+								    <option value="{$v.sy_id}"{if isset($res) && $res.sy_id==$v.sy_id}selected{/if}>{$v.sy_title}</option>
+									{/foreach}
+								</select>
+						    </div>
+						</div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_repass" class="layui-form-label"></label>
+                        <button class="layui-btn" lay-filter="add" style="width:80px" lay-submit="">确定</button></div>
+                </form>
+            </div>
+        </div>
+        <script>
+		layui.use(['form', 'jquery'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form;
+
+                //自定义验证规则
+                form.verify({
+                    nikename: function(value) {
+                        if (value.length < 1) {
+                            return '请填写：操作名';
+                        }
+                    },
+					nikename2: function(value) {
+					   if (value.length < 1){
+					        return '请填写：地址';
+					   }
+					},
+					nikename3: function(value) {
+					   if(value.length < 1){
+					      return '请选择：列表';
+					   }
+					}
+                });
+
+                //监听提交
+                form.on('submit(add)', function(datas) {
+					_.m("正在加载...",16,20000);
+					var data = {
+					   s_name : datas.field.s_name,
+					   sy_id : datas.field.sy_id,
+					   s_address : datas.field.s_address
+					};
+					var datas = {data:data};
+					if({$tid | default='0'}){
+					   datas.tid = {$tid | default='NULL'};
+					}
+					//异步
+					ajax_a("{:url('admin/power_tool')}",datas);
+					//
+                    return false;
+                });
+            });
+		</script>
+    </body>
+</html>

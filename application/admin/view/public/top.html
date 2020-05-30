@@ -1,0 +1,40 @@
+   <div class="top">
+       
+      <div class='top_title'>
+	     <a href='' title='访问前台'><img src='/{$config.config_logo}'></a>
+		 <a href='' class='a'>{$config.config_name}</a>
+	  </div>
+	  
+      <div class='top_point'>
+	     <ul>
+		   {foreach $menu as $v}
+		   <li class="navchild" tid="{$v.sy_id}">{$v.sy_name}</li>
+           {/foreach}
+		 </ul>
+	  </div>
+	  <div class='top_choice'>
+	    <ul class="layui-nav">
+	     <li class="layui-nav-item" data-src="solution_user">
+		    <a href="">安全退出</a>
+		 </li>
+		 <li class="layui-nav-item" data-src="turn_index">
+		    <a href="{$config.website_index}">访问首页<span class="layui-badge-dot"></span></a>
+		 </li>
+		 <li class="layui-nav-item" data-src="admin_user">
+		    <a href="" style="margin-right:20px;margin-right: 10px;padding: 0px 15px;">你好：<b>{$name.ai_name}</b> <span class="layui-badge" style="position: unset;margin:0px;">9</span></a>
+		 </li>
+		 <li class="layui-nav-item" style="min-width:18%;">
+		    <a href="javascript:;">
+			   <i class='layui-icon layui-icon-username' style='font-size:24px;margin-right:25px;'></i>
+			</a>
+			<dl class="layui-nav-child" id="layui-nav-child" style="z-index:1000;">
+			   <dd><a href="javascript:;" data-src="change_password">修改密码</a></dd>
+			   <dd><a href="javascript:;" data-src="journal">清理日志</a></dd>
+			   <dd><a href="javascript:;" data-src="menu_cache">清理菜单缓存</a></dd>
+			</dl>
+		 </li>
+		 
+		</ul>
+	  </div>
+
+   </div>

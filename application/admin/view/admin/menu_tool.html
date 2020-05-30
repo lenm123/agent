@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>菜单栏设置 操作</title>
+        {include file="public/childhead"}
+		<style>
+		   .layui-unselect dl { max-height:200px; }
+		   .layui-form-label {width:50px;}
+           .layui-input-block {margin-left: 80px;min-height: 36px;}
+ 		</style>
+    </head>
+    <body style="background:#fff;">
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <form class="layui-form" style="margin-top:20px;">
+			        					
+						<div class="layui-input-inline layui-form-item" style="width:100%">
+                            <label class="layui-form-label" style="width:70px;margin-left:-20px;">
+                                <span class="x-red">*</span> 一级菜单
+							</label>
+                            <div class="layui-input-block" style="width:190px;position:absolute;">
+                                <select name="sy_bran" lay-filter="select_1">
+								   {foreach $res as $v}
+								   <option value="{$v.sy_id}" {if $v.sy_id == $id} selected {/if}>{$v.sy_title}</option>
+								   {/foreach}
+								   
+								   <option value="-1" {if $data.sy_cid > 0 && isset($menu_update)} selected {/if}>请选择(不选为一级菜单)</option>
+								   
+								</select>
+						    </div>
+							<div style="position:relative;left:300px;top:0px;width:255px;{if $data.sy_bran > '-1' || !isset($menu_update)}display:none;{/if}" id="sy_cid">
+							    <label class="layui-form-label" style="margin-left:-100px;">
+                                    <span class="x-red">*</span> 导航
+							    </label>
+								<div class="layui-input-block" style="width:190px;position:absolute;margin-left:60px;">
+                                    <select name="sy_cid">
+								        {foreach $navigation as $v}
+								        <option value="{$v.sy_id}" {if $v.sy_id == $data.sy_cid}selected{/if}>{$v.sy_name}</option>
+										{/foreach}
+								    </select>
+						        </div>
+							</div>
+						</div>
+                    
+                    <div class="layui-form-item">						
+						<div class="layui-input-inline">
+                            <label class="layui-form-label">
+                                <span class="x-red">*</span> 名称
+							</label>
+                            <div class="layui-input-block" style="width:100%;">
+                                <input type="text" name="sy_title" lay-verify="nikename" autocomplete="off" class="layui-input" value="{if isset($menu_update)}{$data.sy_title}{/if}" />
+						    </div>
+						</div>
+                    </div>
+					<div class="layui-form-item">						
+						<div class="layui-input-inline">
+                            <label class="layui-form-label">
+                                <span class="x-red">*</span> 地址
+							</label>
+                            <div class="layui-input-block" style="width:100%;">
+                                <input type="text" name="sy_name" lay-verify="nikename2" autocomplete="off" class="layui-input" value="{if isset($menu_update)}{$data.sy_name}{/if}" />
+						    </div>
+						</div>
+                    </div>
+					<div class="layui-form-item">						
+						<div class="layui-input-inline">
+                            <label class="layui-form-label">
+                                <span class="x-red">*</span> 图标
+							</label>
+                            <div class="layui-input-block" style="width:100%;">
+                                <input type="text" name="sy_icon" lay-verify="nikename3" autocomplete="off" class="layui-input" value="{if isset($menu_update)}{$data.sy_icon}{/if}" />
+						    </div>
+						</div>
+						<div style="margin-left:290px;line-height:30px;"><i class="layui-icon {if isset($menu_update)}{$data.sy_icon}{/if}" style="font-size:20px;color:red;" id="icon_none"></i></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"></label>
+                        <button class="layui-btn" lay-filter="add" style="width:80px" lay-submit="">{if isset($menu_update)}修改{else/}添加{/if}</button></div>
+                </form>
+            </div>
+        </div>
+        <script>
+		layui.use(['form', 'layer','jquery'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form,
+                layer = layui.layer;
+
+                //自定义验证规则
+                form.verify({
+                    nikename: function(value) {
+                        if (value.length < 1) {
+                            return '名称至少1个字符';
+                        }
+                    },
+					nikename2: function(value) {
+					   if (value.length < 1){
+					        return '请填写地址';
+					   }
+					},
+					nikename3: function(value){
+					   if( value.length < 1){
+					        return '请填写图标';
+					   }
+					}
+                });
+
+                //监听提交
+                form.on('submit(add)',
+                function(datas) {
+					_.m('正在提交...',16,20000);
+					var data={
+					    sy_bran : datas.field.sy_bran,
+                        sy_name : datas.field.sy_name,
+						sy_title : datas.field.sy_title,
+						sy_icon : datas.field.sy_icon
+					};
+                    if(data.sy_bran == '-1'){
+					   data.sy_cid = datas.field.sy_cid;
+					}
+				 //PHP验证 修改/添加
+                 {if isset($menu_update)}
+				    if(data.sy_name != '#' && '{$data.sy_name}' == '#'){
+					   _.ts("已改为有效地址，要删除下面的子菜单吗？",function(){
+					      window.addmenu_ajax({data:data,id:{$data.sy_id},del:1},'{:url("admin/menu_update")}','已修改,请尽快完善修改...');
+					   });
+					}else{
+					   window.addmenu_ajax({data:data,id:{$data.sy_id}},'{:url("admin/menu_update")}','已修改,请尽快完善修改...');
+                    }
+				 {else/}
+					var variable = true;
+					/*
+					  1. sy_bran说明再添加一级菜单，不需要执行这一步；
+					  2.当前数据为有效地址时
+					*/
+					if(data.sy_bran != '-1' && '{$data.sy_name}' != '#'){
+					   variable = false;
+		           	   _.ts("该地址为有效地址，须改为 '#'",function(){
+						     _.a("{:url('admin/menu_update')}",{id:data.sy_bran,data:{sy_name:'#'}},function(res){
+						        if(res.code){
+							       window.addmenu_ajax(data);
+							    }else{
+							       _.m(res.msg,5,2000);
+						   	    }
+					   	     },false);
+					   })
+					}
+					
+					if(!variable){
+					   return false;
+					}
+					
+                    _.m('正在提交...',16,20000);
+                    window.addmenu_ajax(data);
+				 {/if}
+					//
+                    return false;
+                });
+                
+				//添加处理
+				window.addmenu_ajax = function(data,url="{:url('admin/addclass_all')}",title="添加成功,请尽快配置该地址..."){
+				   $.ajax({
+                      type: 'post',
+                      url: url,
+                      data: data,
+					  dataType:'json',
+                      success: function (res) {
+                         if(res.code){
+						    parent._.m(title,1,2000);
+							xadmin.close();
+							//调用父级函数，动态更新数据列表
+				            parent.renderTable();
+							// 可以对父窗口进行刷新 
+                            //xadmin.father_reload();
+                            return false;
+					     }else{
+					        _.m(res.msg,5,1000);
+					     }
+                      }
+                   });
+				}
+
+				//导航选项加载
+				form.on('select(select_1)',function(data){
+				   if(data.value == '-1'){
+				      $("#sy_cid").css("display","block");
+				      return;
+				   }
+				   $("#sy_cid").css("display","none");
+				})
+                
+				//icon加载
+				$("input[name=sy_icon]").keyup(function(){
+				   var variable = $(this).val();
+				   if(variable.length > 11){
+				      $("#icon_none").attr("class","layui-icon "+variable);
+				   }
+				});
+                
+				$("#icon_none").hover(function(){
+				   layer.tips('图标预览', '#icon_none', {
+                      tips: [1, '#3595CC'],
+                      time: 2000
+                   });
+				});
+				
+            });
+		</script>
+    </body>
+</html>

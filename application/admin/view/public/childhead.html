@@ -1,0 +1,70 @@
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<link rel="stylesheet" href="__STATIC__/css/xadmin.css">
+<script type="text/javascript" src="__STATIC__/lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="__STATIC__/js/xadmin.js"></script>
+<script src="__STATIC__/js/func_layer.js"></script>
+<script>
+window.login_top = function(){
+   	 parent.login_top();
+}
+
+/*删除*/
+function member_del(id,url){
+   _.ts('确认要删除吗？',function(index){
+      //发异步删除数据
+	  _.a(url,{id:id},function(res){
+	   	 if(res.code){
+		    _.m(res.msg,1,1000);
+			setTimeout(function(){
+			   tableText();
+		    },500)
+		 }else{
+		   	_.m(res.msg,5,1000);
+	   	 }
+	  });
+  });
+}
+
+//子窗口操作
+function ajax_a(url='',datas=''){
+   layer.load(0,{time:1000*20});
+   _.a(url,datas,function(res){
+      if(res.code){
+	     parent._.m(res.msg,1,1000);
+		 xadmin.close();
+		 //调用父级函数，动态更新数据列表
+		 parent.tableText();
+	  }else{
+	     _.m(res.msg,5,1000);
+		 if(res.url){
+		    setTimeout(function(){
+			   parent.login_top();
+			},1000)
+		 }
+      }
+   })
+}
+
+//开关
+function ajax_switch(obj,url,eq_one=1){
+   var data = $(obj.elem);
+   //遍历父级tr，取第一个，然后查找第二个td，取值
+   var id = data.parents('tr').first().find('td').eq(eq_one).text();
+   id = id.replace(/\s*/g,"");
+   //checkbox状态(点击后的状态)
+   var check = obj.elem.checked;
+   if(check==true){
+   	  check=1;
+   }else{
+	  check=0;
+   }
+   var key = obj.elem.name;
+   _.a(url,{id:id,name:check,key:key},function(res){
+      if(!res.code){
+		tableText();
+	     _.m(res.msg,2,1500);
+	  }
+   });
+}
+</script>

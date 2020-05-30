@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>权限归属列表</title>
+        {include file="public/childhead"}
+		<style>
+		.layui-table-body{overflow-x: hidden !important;}		
+		</style>
+    </head>
+    <body>
+        {include file="public/childheader"}
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+					    <div class="layui-card-body ">
+                            <blockquote class="layui-elem-quote">包含系统所有的数据操作</blockquote>
+							<hr/>
+                        </div>
+                        <div class="layui-card-body layui-table-body layui-table-main">
+                            <table class="layui-table layui-form" id="demo" lay-filter="test">
+                                <tbody class="x-cate">
+                                </tbody>
+                            </table>
+						    <script type="text/html" id="toolbarDemo">
+							   <div class="layui-btn-container" >
+									  <button type="button" onclick="xadmin.open('编辑','{:url(\"admin/power_tool\")}?tid={{d.s_id}}',630,420)" title="编辑" class="layui-btn" style="text-align:center;line-height:25px;width:35px;"><i class="layui-icon"></i></button>
+                                      <button type="button" onclick="member_del({{d.s_id}},'{:url('admin/power_dele')}')" title="删除" class="layui-btn layui-btn-danger" style="text-align:center;line-height:25px;width:35px;"><i class="layui-icon"></i></button> 
+                               </div>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+	<script type="text/html" id="toptext">
+       <div class="layui-btn-container" >
+		  <button class="layui-btn" onclick="xadmin.open('添加','{:url(\"admin/power_tool\")}',630,420)"><i class="layui-icon"></i>添加</button>
+	   </div>
+    </script>
+    <script>
+
+      window.tableText=function(){
+	  layui.use('table', function(){
+          var table = layui.table;
+
+          table.render({
+              elem: '#demo'
+              ,align:'center'
+              ,url: '{:url("admin/power")}' //数据接口
+			  ,method:'post'
+              ,toolbar: '#toptext'
+			  ,initSort: {
+                 field: 's_address' //排序字段，对应 cols 设定的各字段名
+                 ,type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+              }
+			  ,page: true
+              ,cols: [[ //表头
+                  {field: 's_id', title: 'ID'}
+                  ,{field: 's_name', title: '操作名'}
+				  ,{field: 's_address', title: '地址', sort: true}
+                  ,{field: 'sy_id', title: '列表', sort:true}
+                  ,{fixed: 'right', title: '操作', toolbar: '#toolbarDemo'}
+              ]]
+          });
+
+      })
+	  }
+
+	  tableText();  
+    </script>
+</html>

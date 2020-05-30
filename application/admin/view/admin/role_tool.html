@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>角色管理 操作</title>
+        {include file="public/childhead"}
+		<style>
+		   .layui-unselect dl { max-height:150px; }
+		   .layui-form-label {width:50px;}
+           .layui-input-block {margin-left: 80px;min-height: 36px;}
+		   .layui-form-item .layui-form-checkbox[lay-skin=primary]{margin:0px;margin-top:-3px;}
+ 		</style>
+    </head>
+    <body style="background:#fff;">
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <form class="layui-form layui-form-pane" style="margin:20px 20px;">                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+						    <span class="x-red">*</span> 角色名
+						</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" value="{$res.ro_name | default=''}">
+                        </div>
+                    </div>
+					<div class="layui-form-item layui-form-text" style="width:70%;">
+                        <label class="layui-form-label">
+                            <span class="x-red">*</span> 拥有权限
+                        </label>
+						<span style="float:right;margin-top:-21px;">
+						    <input type="checkbox" name="Checkbox" lay-skin="primary" lay-filter="AllChoose" title="全选"
+							{if isset($check)}checked{/if}>
+						</span>
+                    <table  class="layui-table layui-input-block">
+                        <tbody>
+						    {foreach $datas as $k=>$v}
+                            <tr>
+                                <td style="width:150px;">
+                                    <input type="checkbox" name="sy_id" lay-skin="primary" value="{$v.sy_id}" title="{$v.sy_title}" lay-filter="Choose"{if isset($res)}{for start="0" end="$res['ro_limit']|count"}{if $v.sy_id == $res['ro_limit'][$i]}checked{/if}{/for}{/if}>
+                                </td>
+                                <td>
+                                    <div class="layui-input-block">
+									    {foreach $data as $j}
+										   {if $j.sy_id == $v.sy_id}
+                                        <span>{$j.s_name}</span>
+										   {/if}
+										{/foreach}
+                                    </div>
+                                </td>
+                            </tr>
+							{/foreach}
+                        </tbody>
+                    </table>
+                    </div>
+					<div class="layui-form-item layui-form-text" style="width:70%;">
+                        <label for="desc" class="layui-form-label">
+                            描述
+                        </label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入内容" name="desc" class="layui-textarea">{$res.ro_describe | default=''}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="width:37.4%;float:right;">
+                        <button class="layui-btn" lay-filter="add" style="width:80px" lay-submit="">确定</button>
+					</div>
+                </form>
+            </div>
+        </div>
+        <script>
+		layui.use(['form','jquery'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form;
+
+                //自定义验证规则
+                form.verify({
+                    nikename: function(value) {
+                        if (value.length < 1) {
+                            return '请填写：操作名';
+                        }
+                    }
+                });
+
+                //全选
+				form.on('checkbox(AllChoose)', function (data) {
+                   var child = $(".layui-table input[type='checkbox']");
+                   child.each(function (index, item) {
+                      item.checked = data.elem.checked;
+                   });
+				   form.render('checkbox');
+                });
+                //全选按钮true,false
+				form.on('checkbox(Choose)', function (data) {
+				   var child = $(".layui-table input[type='checkbox']");
+				   var bool = false;
+				   child.each(function (index, item) {
+				      if(!$(this).prop("checked")){
+					     bool = true;
+					  };
+				   })
+				   if(!bool){
+				      $("input[name=Checkbox]").prop("checked",true);
+				   }else{
+				      $("input[name=Checkbox]").prop("checked",false);
+				   }
+                   form.render('checkbox');
+				})
+
+                //监听提交
+                form.on('submit(add)', function(data) {					
+					_.m("正在加载...",16,20000);
+					var data = {
+					   ro_name: data.field.name,
+					   ro_limit: $("input[name=sy_id]").map(function(){
+						   if($(this).prop("checked")){
+						      return this.value;
+						   }
+					   }).get().join(","),
+					   ro_describe: data.field.desc
+					};
+					var datas = {data:data};
+					if({$tid | default='0'}){
+					   datas.tid = {$tid | default='NULL'};
+					}
+					//异步
+					ajax_a('{:url("admin/role_tool")}',datas);
+					//
+                    return false;
+                });
+				
+            });
+		</script>
+    </body>
+</html>

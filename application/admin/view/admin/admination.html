@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>管理员列表</title>
+        {include file="public/childhead"}
+		<style>
+		.layui-table-body{overflow-x: hidden !important;}		
+		</style>
+    </head>
+    <body>
+        {include file="public/childheader"}
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+					    <div class="layui-card-body ">
+                            <blockquote class="layui-elem-quote">系统的所有用户（不包含前台用户）</blockquote>
+							<hr/>
+                        </div>
+                        <div class="layui-card-body layui-table-body layui-table-main">
+                            <table class="layui-table layui-form" id="demo" lay-filter="test">
+                                <tbody class="x-cate">
+                                </tbody>
+                            </table>
+						    <script type="text/html" id="toolbarDemo">
+							   <div class="layui-btn-container" >
+							         {{# if(d.power == 1){}}
+                                      <button type="button" class="layui-btn layui-btn-disabled">禁用按钮</button>
+									 {{# } else{}}
+									  <button type="button" onclick="xadmin.open('编辑','{:url(\"admin/admin_tool\")}?tid={{d.ai_id}}',630,420,1)" title="编辑" class="layui-btn" style="text-align:center;line-height:25px;width:35px;"><i class="layui-icon"></i></button>
+                                      <button type="button" onclick="member_del({{d.ai_id}},'{:url('admin/admin_dele')}')" title="删除" class="layui-btn layui-btn-danger" style="text-align:center;line-height:25px;width:35px;"><i class="layui-icon"></i></button> 
+									 {{# } }}
+                               </div>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+	<script type="text/html" id="toptext">
+       <div class="layui-btn-container" >
+		  <button class="layui-btn" onclick="xadmin.open('添加','{:url(\"admin/admin_tool\")}','1000','500',1)"><i class="layui-icon"></i>添加</button>
+		  <!--
+		  <button class="layui-btn layui-btn-danger" lay-event = "getCheckData"><i class="layui-icon"></i>批量删除</button>
+	      -->
+	   </div>
+	   
+    </script>
+	<script type="text/html" id="ai_cid">
+	{{# if(d.power == 1){}}
+	<button type="button" class="layui-btn layui-btn-sm layui-btn-normal">已启用</button>
+	{{# } else{}}
+	<input type="checkbox" lay-skin="switch" value="1" lay-filter="switchTest" lay-text="启用|禁用"{{ d.ai_cid == 1 ? 'checked': ''}} style="font-size:12px;">
+	{{# } }}
+	</script>
+    <script>      
+	  layui.use(['table','form'], function(){
+          var table = layui.table,
+		  form = layui.form;
+
+          window.tableText=function(){
+			table.render({
+              elem: '#demo'
+              ,align:'center'
+              ,url: '{:url("admin/admination")}' //数据接口
+			  ,method:'post'
+              ,toolbar: '#toptext'
+			  ,page: true
+              ,cols: [[ //表头
+                  {field: 'ai_id', title: 'ID'}
+                  ,{field: 'ai_user', title: '登录名'}
+				  ,{field: 'ai_name', title: '昵称'}
+                  ,{field: 'ai_email', title: '邮箱'}
+				  ,{field: 'ai_hone', title: '手机'}
+				  ,{field: 'ai_time', title: '加入时间', minWidth:140}
+				  ,{field: 'last_login_time', title: '最后登录时间', minWidth:140}
+				  ,{field: 'last_login_ip', title: '最后登录IP', minWidth:90}
+				  ,{field: 'ro_id', title: '角色'}
+				  ,{field: 'ai_cid', title: '状态', toolbar: '#ai_cid', minWidth:90}
+                  ,{fixed: 'right', title: '操作', toolbar: '#toolbarDemo', minWidth:110}
+              ]]
+           });
+         }
+		 tableText(); 
+
+		 /*用户-停用*/
+         form.on("switch(switchTest)", function(obj){
+            var data = $(obj.elem);
+            //遍历父级tr，取第一个，然后查找第二个td，取值
+            var id = data.parents('tr').first().find('td').eq(0).text();
+            //checkbox状态(点击后的状态)
+            var check = obj.elem.checked;
+            if(check == true){
+			   check=1;
+			}else{
+			   check=0;
+			}
+			
+			$.ajax({
+		       type:'post',
+               url:"{:url('admin/admin_upper')}",
+			   data:{ai_id:id,ai_cid:check},
+			   dataType:'json',
+			   success:function(res){
+			      if(res.code){
+			         _.m(res.msg,1,1000);
+				  }else{
+					 window.tableText();
+				     _.m(res.msg,5,1000);
+				  }
+			   }
+            });
+		 });
+	  }); 
+    </script>
+</html>

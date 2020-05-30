@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">				
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>导航菜单</title>
+	<link rel="stylesheet" href="/static/lib/layui/css/layui.css" media="all">
+	{include file="public/childhead"}
+	<style>
+		.layui-table-body{overflow-x: hidden !important;}
+		.ctext{
+		   text-align:center;line-height:25px;width:35px;
+		}
+		.color{
+           background: linear-gradient(to right, red, blue);
+           -webkit-background-clip: text;
+           color: transparent;
+           -webkit-text-fill-color: transparent; 
+           text-fill-color: transparent;
+		}
+	</style>
+</head>
+<body>
+<!-- 你的HTML代码 -->
+<!-- 表格 -->
+        {include file="public/childheader"}
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+					    
+					    <div class="layui-card-body ">
+                            <blockquote class="layui-elem-quote">所有的子菜单已用彩色备注且显示在前</blockquote>
+							<hr/>
+                        </div>
+
+                        <!-- 操作按钮 -->
+                        <div class="layui-btn-group" style="margin-left:15px;">
+					        <button class="layui-btn " id="btn-expand"><i class="layui-icon layui-icon-down"></i> 全部展开</button>
+					        <button class="layui-btn " id="btn-fold"><i class="layui-icon layui-icon-left"></i> 全部折叠</button>
+					        <button class="layui-btn " id="btn-refresh"><i class="layui-icon layui-icon-loading"></i> 刷新表格</button>
+			            </div>
+                        <div class="layui-inline">
+         	                <input class="layui-input" id="edt-search" value="" placeholder="输入关键字">
+                        </div>
+                        <button class="layui-btn" id="btn-search"  type="button">搜索</button>
+
+
+                        <div class="layui-card-body layui-table-body layui-table-main" style="margin-top:0px;">
+                            <table id="table1" class="layui-table" lay-filter="table1"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+ 
+<!-- 操作列 -->
+
+<script type="text/html" id="tooltext">
+</script>
+<script type="text/html" id="ctext">
+<div class="layui-btn-group">
+  <div class="layui-btn-group">
+    {{#if (d.sy_bran == '-1') { }}
+    <button type="button" style="background:#ffb800;" class="layui-btn layui-btn-sm ctext" title='添加' onclick="xadmin.open('添加','{:url(\"admin/addclass_all\")}?id={{d.sy_id}}',600,400)"><i class="layui-icon"></i></button>
+	{{#} }}
+
+	<button type="button" onclick="xadmin.open('编辑','{:url(\"admin/addclass_all\")}?x_id={{d.sy_id}}',600,400)" title="编辑" class="layui-btn ctext">
+	    <i class="layui-icon"></i>
+	</button>
+
+    <button type="button" onclick="menu_del({{d.sy_id}})" title="删除" class="layui-btn layui-btn-danger ctext">
+	    <i class="layui-icon"></i>
+	</button>
+  </div>
+</div>
+</script>
+<!-- 表格end -->
+<script>
+    layui.config({
+        base: '/static/treetable-lay/module/'
+    }).extend({
+        treetable: 'treetable-lay/treetable'
+    }).use(['layer', 'table', 'treetable','form','jquery'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var form = layui.form;
+       // var element = layui.element;
+        var layer = layui.layer;
+        var treetable = layui.treetable;
+
+        // 渲染表格
+        window.renderTable = function () {
+            layer.load(2);
+            treetable.render({
+                treeColIndex: 1,
+                treeSpid: -1,
+		        treeIdName: 'sy_id',
+		        treePidName: 'sy_bran',
+                treeDefaultClose: true,
+                treeLinkage: false,
+                elem: '#table1',
+				url: "{:url('admin/menujsondata_all')}",
+                toolbar:'#tooltext',
+				/*initSort: {
+                   field: 'sy_cid' //排序字段，对应 cols 设定的各字段名
+                   ,type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+                },*/
+		        cols: [[
+				   {field: 'sy_id', title: 'ID', sort: true},
+		           {field: 'sy_name', title: '地址', sort: true},
+				   {field: 'sy_title', title: '名称'},
+				   {field: 'sy_icon', title: '图标', templet: function(d){ 
+				      return "<i class='layui-icon "+d.sy_icon+"'> : </i> &nbsp"+d.sy_icon;
+				   }},
+				   {field: 'sy_cid', title: '所属', templet: function(d){
+					   {foreach $menu as $vs}
+					      var variables = {$vs.sy_id};
+						  if(variables == d.sy_bran){
+						     return "<span class='color'>{$vs.sy_title}</span>";
+						  }
+					   {/foreach}
+					   {foreach $navigation as $v}
+					     var variable = {$v.sy_id};
+						 if(variable == d.sy_cid){
+						    return "<b>{$v.sy_name}</b>";
+						 }
+					   {/foreach}
+				   }, sort: true},
+				   {field: '', title: '操作', toolbar: '#ctext'}
+		        ]],
+                done: function (res) {
+                   layer.closeAll('loading');
+				   $(".color").each(function(i){
+				      $(this).parents("tr").css("background-color","#f8f8f8");
+				   })
+                }
+            });
+        };
+        
+		renderTable();
+
+        //全部展开
+        $(document).on("click","#btn-expand",function(){
+            treetable.expandAll('#table1');
+        });
+ 
+        //全部折叠
+        $(document).on("click","#btn-fold",function(){
+            treetable.foldAll('#table1');
+        });
+ 
+        //刷新表格
+        $(document).on("click","#btn-refresh",function(){
+            renderTable();
+        });
+        //搜索
+        $(document).on("click","#btn-search",function(){
+            var keyword = $('#edt-search').val();
+            var searchCount = 0;
+            $('#table1').next('.treeTable').find('.layui-table-body tbody tr td').each(function () {
+                $(this).css('background-color', 'transparent');
+                var text = $(this).text();
+                if (keyword != '' && text.indexOf(keyword) >= 0) {
+                    $(this).css('background-color', 'rgba(250,230,160,0.5)');
+                    if (searchCount == 0) {
+                        treetable.expandAll('#table1');
+                        $('html,body').stop(true);
+                        $('html,body').animate({scrollTop: $(this).offset().top - 150}, 500);
+                    }
+                    searchCount++;
+                }
+            });
+            if (keyword == '') {
+                _.m("请输入搜索内容", 5, 1000);
+            } else if (searchCount == 0) {
+                _.m("没有匹配结果", 5, 1000);
+            }
+        });
+        
+		//删除单条
+		/*
+		   存在子菜单选择是否删除
+		*/
+        window.menu_del = function(id){
+          _.ts('确认要删除吗？',function(){
+              //发异步删除数据
+			  _.a("{:url('admin/menu_dele')}",{id_all:id},function(res){
+			     if(res.code == 1){
+					 _.m(res.msg,1,1000);
+					 setTimeout(function(){
+					     renderTable();
+					 },500);
+				 }else if(res.code == 'mail'){
+				    _.ts("存在子菜单，删除才能进行该操作",function(){
+					   _.a("{:url('admin/member_dele')}",{id_all:id,tid:1},function(ress){
+					      if(ress.code){
+						     _.m(res.msg,1,1000);
+							 setTimeout(function(){
+							    renderTable();
+							 },500);
+						  }else{
+						     _.m(res.msg,5,1000);
+						  }
+					   });
+					})
+				 }else{
+				    _.m(res.msg,5,1000);
+			     }
+			  });
+           });
+        }
+    });
+
+</script>
+</body>
+</html>

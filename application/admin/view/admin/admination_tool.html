@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>管理员列表 操作</title>
+        {include file="public/childhead"}
+		<style>
+		   .layui-unselect dl { max-height:150px; }
+		   .layui-form-label {width:50px;}
+           .layui-input-block {margin-left: 80px;min-height: 36px;}
+		   .layui-form-item .layui-form-checkbox[lay-skin=primary]{margin:0px;margin-top:-3px;}
+		   .box{float:left;width:60%;height:100%;margin:3% 5%;}
+ 		</style>
+    </head>
+    <body style="background:#fff;">
+	    <div class="box">
+        <div class="layui-fluid">
+            <div class="layui-row">
+			    <p>ps:{if !isset($res)}创建一个新的用户{else/}仅可修改基本选项{/if}</p>
+                <form class="layui-form layui-form-pane" style="margin:20px 20px;">                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+						    <span class="x-red">*</span> 账号
+						</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="user" lay-verify="user" placeholder="请输入" autocomplete="off" class="layui-input" value="{$res.ai_user | default=''}">
+                        </div>
+						<div class="layui-form-mid layui-word-aux">
+                            <span class="x-red">*</span> 将会成为您唯一的登入名
+                        </div>
+                    </div>
+					<div class="layui-form-item">
+                        <label class="layui-form-label">
+						    <span class="x-red">*</span> 昵称
+						</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" lay-verify="name" placeholder="请输入" autocomplete="off" class="layui-input" value="{$res.ai_name | default=''}">
+                        </div>
+						<div class="layui-form-mid layui-word-aux">
+                            <span class="x-red">*</span> 将会成为系统对您的称呼 ( 1 - 7 个字符之间 )
+                        </div>
+                    </div>
+					
+					<div class="layui-form-item">
+                        <label class="layui-form-label">
+						    <span class="x-red">*</span> 手机
+						</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="hone" lay-verify="hone" placeholder="请输入" autocomplete="off" class="layui-input" value="{$res.ai_hone | default=''}">
+                        </div>
+                    </div>
+					<div class="layui-form-item">
+                        <label class="layui-form-label">
+						    <span class="x-red">*</span> 邮箱
+						</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="email" lay-verify="email" placeholder="请输入" autocomplete="off" class="layui-input" value="{$res.ai_email | default=''}">
+                        </div>
+                    </div>
+					<div class="layui-form-item">
+                        <label class="layui-form-label">
+						    <span class="x-red">*</span> 角色
+						</label>
+                        <div class="layui-input-inline">
+                            <select name="ro_id" lay-verify="ro_id">
+							    <option value="">请选择</option>
+								{foreach $role as $v}
+								<option value="{$v.ro_id}"{if isset($res.ro_id) && $res.ro_id == $v.ro_id}selected{/if}>{$v.ro_name}</option>
+								{/foreach}
+							</select>
+                        </div>
+                    </div>
+                    {if !isset($res)}
+					<div class="layui-form-item">
+                        <label class="layui-form-label">
+						    <span class="x-red">*</span> 密码
+						</label>
+                        <div class="layui-input-inline">
+                            <input type="password" name="pass" lay-verify="pass" placeholder="请输入" autocomplete="off" class="layui-input" value="{$res.ai_pass | default=''}">
+                        </div>
+						<div class="layui-form-mid layui-word-aux">
+                            <span class="x-red">*</span> 6 - 16个字符之间
+                        </div>
+                    </div>
+
+					<div class="layui-form-item">
+                        <label class="layui-form-label">
+						    <span class="x-red">*</span> 确认密码
+						</label>
+                        <div class="layui-input-inline">
+                            <input type="password" name="pass2" lay-verify="pass2" placeholder="请输入" autocomplete="off" class="layui-input" value="{$res.ai_pass | default=''}">
+                        </div>
+                    </div>
+                    {/if}
+					<div class="layui-form-item">
+                        <label class="layui-form-label" style="background-color: #fff;border:0px;">
+						    <span class="x-red">*</span> 是否启用
+						</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" {if isset($res) && $res.ai_cid == 1}checked{elseif !isset($res)}checked{/if} name="open" lay-skin="switch" lay-filter="switchTest" title="启用|停用">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="width:64%;float:right;">
+                        <button class="layui-btn" lay-filter="add" style="width:80px" lay-submit="">确定</button>
+					</div>
+                </form>
+            </div>
+        </div>
+		</div>
+        <script>
+		layui.use(['form','jquery'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form;
+
+                //自定义验证规则
+                form.verify({
+                    user: function(value) {
+                        if (value.length < 1) {
+                            return '请填写：用户名';
+                        }
+                    },
+					name: function(value) {
+                        if (value.length < 1 ) {
+                            return '请填写：昵称';
+                        }else if(value.length < 1 || value.length > 7){
+						   return '昵称在 1 - 7 个字符之间';
+						}
+                    },
+					ro_id: function(value) {
+                        if (value.length < 1) {
+                            return '请选择：角色';
+                        }
+                    },
+					{if !isset($res)}
+					pass: function(value) {
+                        if (value.length < 1 ) {
+                            return '请填写：密码';
+                        }else if(value.length < 6 || value.length > 16){
+						   return '密码在 6 - 16 个字符之间';
+						}
+                    },
+					pass2: function(value) {
+                        if (value.length < 1) {
+                            return '请填写：确认密码';
+                        }else if($("input[name=pass]").val() != $("input[name=pass2]").val()){
+						    return "密码不一致";
+						}
+                    },
+					{/if}
+					hone: [/^1\d{10}$/, "请输入正确的手机号"],
+		            email: [/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/, "邮箱格式不正确"]
+                });
+
+                //监听提交
+                form.on('submit(add)', function(data) {					
+					_.m("正在加载...",16,20000);
+					if(data.field.open == "on") {
+                        data.field.open = "1";
+                    } else {
+                        data.field.open = "0";
+                    }
+
+					var data = {
+					   ai_user : data.field.user,
+                       ai_name : data.field.name,
+					   ai_hone : data.field.hone,
+					   ai_email : data.field.email,
+					   ro_id : data.field.ro_id,
+					   {if !isset($res)}
+					   ai_pass : data.field.pass,
+					   {/if}
+					   ai_cid : data.field.open
+					};
+					var datas = {data:data};
+					if({$tid | default='0'}){
+					   datas.tid = {$tid | default='NULL'};
+					}
+					//异步
+					ajax_a('{:url("admin/admin_tool")}',datas);
+					//
+                    return false;
+                });
+				
+            });
+		</script>
+    </body>
+</html>

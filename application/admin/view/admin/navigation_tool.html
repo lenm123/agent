@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>导航栏设置 操作</title>
+        {include file="public/childhead"}
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+            <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+            <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+		<style>
+		   .layui-unselect dl { max-height:200px; }
+		   .layui-form-label {width:50px;}
+           .layui-input-block {margin-left: 80px;min-height: 36px;}
+ 		</style>
+    </head>
+    <body style="background:#fff;">
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <form class="layui-form" style="margin-top:20px;">                    
+                    <div class="layui-form-item">						
+						<div class="layui-input-inline">
+                            <label for="L_username" class="layui-form-label">
+                                <span class="x-red">*</span> 地址
+							</label>
+                            <div class="layui-input-block" style="width:100%;">
+                                <input type="text" name="sy_title" lay-verify="nikename" autocomplete="off" class="layui-input" value="{$res.sy_title | default=''}" />
+						    </div>
+						</div>
+                    </div>
+					<div class="layui-form-item">						
+						<div class="layui-input-inline">
+                            <label for="L_username" class="layui-form-label">
+                                <span class="x-red">*</span> 名称
+							</label>
+                            <div class="layui-input-block" style="width:100%;">
+                                <input type="text" name="sy_name" lay-verify="nikename2" autocomplete="off" class="layui-input" value="{$res.sy_name | default=''}" />
+						    </div>
+						</div>
+                    </div>
+					<div class="layui-form-item">						
+						<div class="layui-input-inline">
+                            <label for="L_username" class="layui-form-label">
+                                图标
+							</label>
+                            <div class="layui-input-block" style="width:100%;">
+                                <input type="text" name="sy_icon" autocomplete="off" class="layui-input" value="{$res.sy_icon | default=''}" placeholder="默认 NULL"/>
+						    </div>
+						</div>
+						<div style="margin-left:290px;line-height:30px;"><i class="layui-icon {if isset($menu_update)}{$data.sy_icon}{/if}" style="font-size:20px;color:red;" id="icon_none"></i></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_repass" class="layui-form-label"></label>
+                        <button class="layui-btn" lay-filter="add" style="width:80px" lay-submit="">确定</button></div>
+                </form>
+            </div>
+        </div>
+        <script>
+		layui.use(['form', 'layer','jquery'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form,
+                layer = layui.layer;
+
+                //自定义验证规则
+                form.verify({
+                    nikename: function(value) {
+                        if (value.length < 1) {
+                            return '请填写地址';
+                        }
+                    },
+					nikename2: function(value) {
+					   if (value.length < 1){
+					        return '请填写名称';
+					   }
+					}
+                });
+
+                //监听提交
+                form.on('submit(add)', function(datas) {
+					_.m("正在加载...",16,20000);
+					var data = {
+					   sy_name : datas.field.sy_name,
+					   sy_title : datas.field.sy_title,
+					   sy_icon : datas.field.sy_icon
+					};
+					var datas = {data:data};
+					if({$tid | default='0'}){
+					   datas.tid = {$tid | default='NULL'};
+					}
+
+					//异步提交
+					ajax_a('{:url("admin/navigation_tool")}',datas);
+					//
+                    return false;
+                });
+                
+				//icon加载
+				$("input[name=sy_icon]").keyup(function(){
+				   var variable = $(this).val();
+				   if(variable.length > 11){
+				      $("#icon_none").attr("class","layui-icon "+variable);
+				   }
+				});
+                
+				$("#icon_none").hover(function(){
+				   layer.tips('图标预览', '#icon_none', {
+                      tips: [1, '#3595CC'],
+                      time: 2000
+                   });
+				});
+				
+            });
+		</script>
+    </body>
+</html>

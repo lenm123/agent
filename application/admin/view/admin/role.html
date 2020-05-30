@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>角色管理</title>
+        {include file="public/childhead"}
+		<style>
+		.layui-table-body{overflow-x: hidden !important;}		
+		</style>
+    </head>
+    <body>
+        {include file="public/childheader"}
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+					    <div class="layui-card-body ">
+                            <blockquote class="layui-elem-quote">权限越大系统的操作空间越大</blockquote>
+							<hr/>
+                        </div>
+                        <div class="layui-card-body layui-table-body layui-table-main">
+                            <table class="layui-table layui-form" id="demo" lay-filter="test">
+                                <tbody class="x-cate">
+                                </tbody>
+                            </table>
+						    <script type="text/html" id="toolbarDemo">
+							   <div class="layui-btn-container" >
+									  <button type="button" onclick="xadmin.open('编辑','{:url(\"admin/role_tool\")}?tid={{d.ro_id}}',630,420,1)" title="编辑" class="layui-btn" style="text-align:center;line-height:25px;width:35px;"><i class="layui-icon"></i></button>
+                                      <button type="button" onclick="member_del({{d.ro_id}},'{:url('admin/role_dele')}')" title="删除" class="layui-btn layui-btn-danger" style="text-align:center;line-height:25px;width:35px;"><i class="layui-icon"></i></button> 
+                               </div>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+	<script type="text/html" id="toptext">
+       <div class="layui-btn-container" >
+		  <button class="layui-btn" onclick="xadmin.open('添加','{:url(\"admin/role_tool\")}',630,420,1)"><i class="layui-icon"></i>添加</button>
+	   </div>
+    </script>
+    <script>
+      window.tableText=function(shop_id=0,status=0){
+	  layui.use(['table','form'], function(){
+          var table = layui.table,
+		  form = layui.form;
+
+          table.render({
+              elem: '#demo'
+              ,align:'center'
+              ,url: '{:url("admin/role")}' //数据接口
+			  ,method:'post'
+              ,toolbar: '#toptext'
+			  ,page: true
+              ,cols: [[ //表头
+                  {field: 'ro_id', title: 'ID'}
+                  ,{field: 'ro_name', title: '角色名'}
+				  ,{field: 'ro_limit', title: '权限',templet: function(d){
+				     if(d.ro_limit == 'NULL'){
+					    return "<span style='color:#aaa'>"+d.ro_limit+"</span>";
+					 }
+					 return d.ro_limit;
+				  }}
+                  ,{field: 'ro_describe', title: '描述'}
+                  ,{fixed: 'right', title: '操作', toolbar: '#toolbarDemo'}
+              ]]
+          });
+
+      })
+	  }
+
+	  tableText();  
+    </script>
+</html>

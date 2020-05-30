@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>系统配置</title>
+        {include file="public/childhead"}
+		<script src="__STATIC__/js/jquery.js"></script>
+		<style>
+		body{font-size:14px!important;}
+		.layui-table-body{overflow-x: hidden !important;}
+		.layui-color{color:#888;font-size:12px;}
+		.layui-img{width:100px;border-radius:50px;}
+		.layui-input-block{margin-left:100px;}
+		.layui-upload-img{
+		    width: 92px;
+            height: 92px;
+            margin: 0px;
+			background: #eee;
+			border: 0px;
+			margin-left: 110px;
+			padding-bottom: 0px;
+ 		}
+		#test{width: 100px;height: 100px;float:left;margin-top:-110px;border-radius:50px;opacity:0}
+		.layui-input{padding-right:8px;}
+		</style>
+    </head>
+    <body>
+        {include file="public/childheader"}
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+					    <div class="layui-card-body ">
+                            <blockquote class="layui-elem-quote">包含一些网站的基本操作</blockquote>
+							<hr/>
+                        </div>
+                        <div class="layui-card-body layui-table-body layui-table-main">
+                            <form class="layui-form">				
+						        <div class="layui-input-inline layui-form-item" style="margin-left:100px;">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span> 系统名称 <b>:</b>
+						 	        </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="config_name" lay-verify="config_name" autocomplete="off" class="layui-input" value="{$data.config_name | default=''}" />
+						            </div>
+									<div class="layui-input-inline layui-color">
+									   将成为这个系统的名字
+									</div>
+						        </div>
+								<div class="layui-input-inline layui-form-item" style="margin-left:50px;">
+                                    <label class="layui-form-label" style="margin-top:39px;">
+                                        <span class="x-red">*</span> 系统logo <b>:</b>
+						 	        </label>
+                                    <!--<div class="layui-input-inline" style="width:100px;" title="点击更换logo">
+                                        <img src="__STATIC__/img/toxiang.png" class="layui-img"/>
+						            </div>-->
+									<div class="layui-input-inline" style="width:100px;" title="点击更换logo">
+                                        <div class="layui-upload-list" style="float:left;height:100px">
+                                            <img {if isset($data.config_logo)}src="/{$data.config_logo}"{/if} class="layui-img" style="float:left; border:1px solid #96c2f1;" id="demo"/>
+                                            <p id="demoText"></p>
+											<input type="hidden" name="config_logo" value="{$data.config_logo | default=''}">
+                                        </div>
+										<button type="button" class="layui-btn" id="test">上传图片</button>
+                                    </div>
+						        </div>
+								<div class="layui-input-block layui-form-item" style="margin-top:-37px;">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span> 版权所属 <b>:</b>
+						 	        </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="config_copyright" lay-verify="config_copyright" autocomplete="off" class="layui-input" value="{$data.config_copyright | default=''}" />
+						            </div>
+									<div class="layui-input-inline layui-color">
+									   整个系统的版权所属
+									</div>
+						        </div>
+								<div class="layui-input-block layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span> 开发者 <b>:</b>
+						 	        </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="config_development" lay-verify="config_development" autocomplete="off" class="layui-input" value="{$data.config_development | default=''}" />
+						            </div>
+									<div class="layui-input-inline layui-color">
+									   指定开发系统的个人/团队
+									</div>
+						        </div>
+								<div class="layui-input-block layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span> 前台首页 <b>:</b>
+						 	        </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="website_index" lay-verify="website_index" autocomplete="off" class="layui-input" value="{$data.website_index | default=''}" />
+						            </div>
+									<div class="layui-input-inline layui-color">
+									   链接
+									</div>
+						        </div>
+								<div class="layui-input-block layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span> 网站名称 <b>:</b>
+						 	        </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="website_name" lay-verify="website_name" autocomplete="off" class="layui-input" value="{$data.website_name | default=''}" />
+						            </div>
+									<div class="layui-input-inline layui-color">
+									   将成为网站的名称
+									</div>
+						        </div>
+								<div class="layui-input-block layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span> 前台logo <b>:</b>
+						 	        </label>
+                                    <div class="layui-upload">
+                                        <button type="button" class="layui-btn" id="test2">上传图片</button>
+                                        <div class="layui-upload-list">
+                                            <img class="layui-upload-img" {if isset($data.website_logo)}src="/{$data.website_logo}"{/if} id="demo2">
+                                            <p id="demoText2" style="margin-left:110px;"></p>
+											<input type="hidden" name="website_logo" value="{$data.website_logo | default=''}">
+                                        </div>
+                                    </div> 
+						        </div>
+								<div class="layui-input-block layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span> 前台公告 <b>:</b>
+						 	        </label>
+                                    <div class="layui-input-inline" style="min-width:450px;">
+                                        <input type="text" name="website_notice" lay-verify="website_notice" autocomplete="off" class="layui-input" value="{$data.website_notice | default=''}" />
+						            </div>
+									<div class="layui-input-inline layui-color">
+									   用于发布一些系统的通知
+									</div>
+						        </div>
+								<div class="layui-input-block layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span> 系统邮箱 <b>:</b>
+						 	        </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="website_email" lay-verify="website_email" autocomplete="off" class="layui-input" value="{$data.website_email | default=''}" />
+						            </div>
+									<div class="layui-input-inline layui-color">
+									   方便接收用户信息
+									</div>
+						        </div>
+								<div class="layui-input-block layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span> 上传限制 <b>:</b>
+						 	        </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="website_limit" lay-verify="website_limit" autocomplete="off" class="layui-input" value="{$data.website_limit | default=''}" />
+						            </div>
+									<div class="layui-input-inline layui-color">
+									   限制上传文件最大为多少 单位：KB
+									</div>
+						        </div>
+								<div class="layui-input-block layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span> 前台运行 <b>:</b>
+						 	        </label>
+                                    <div class="layui-input-inline" style="margin-top:5px;min-width:300px;">
+                                        <input type="checkbox" {if isset($data) && $data.website_tion == 1}checked=""{/if} name="website_tion" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF" value="1">
+										<span class="layui-color" style="margin-left:20px;">系统在维护阶段可以先关闭前台</span>
+						            </div>
+						        </div>
+								<div class="layui-form-pane layui-input-block">
+								    <div class="layui-form-item layui-form-text ">
+                                        <label class="layui-form-label">网站底层信息</label>
+                                        <div class="layui-input-block">
+                                            <textarea placeholder="请输入内容" class="layui-textarea" lay-verify="website_textarea" name="website_textarea">{$data.website_textarea | default=''}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+                                    </div>
+                                </div>
+                            </form>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+	
+	layui.use(["form"],function(){
+	   var form = layui.form;
+
+	   form.verify({
+	      config_name: function(value){
+		     if(value.length < 1){
+			    return "请填写：系统名称";
+			 }
+		  }
+		  ,website_name: function(value){
+		     if(value.length < 1){
+			    return "请填写：网站名称";
+			 }
+		  }
+		  ,website_notice: function(value){
+		     if(value.length < 1){
+			    return "请填写：前台公告";
+			 }
+		  }
+		  ,website_email: function(value){
+			 var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+			 if(value.length < 1){
+			    return "请填写：系统邮箱";
+			 }else if(!reg.test(value)){
+			    return "请输入正确的邮箱";
+			 }
+		  }
+		  ,website_limit: function(value){
+		     if(value.length < 1){
+			    return "请填写：上传限制";
+			 }
+		  }
+		  ,website_textarea: function(value){
+		     if(value.length < 1){
+			    return "请填写：网站底层信息";
+			 }
+		  }
+	   });
+
+	   form.on("submit(demo1)",function(data){
+		  if(!data.field.website_tion){
+		     data.field.website_tion = 0;
+		  }
+		  delete data.field.file;
+	      $.ajax({
+		     type:'post',
+			 url:"{:url('config')}",
+			 data:{data:data.field},
+			 dataType:'json',
+			 success:function(data){
+			    if (data.code == 1) {
+                    layer.msg(data.msg+" 等待刷新中...");
+                    setTimeout(function() {
+                        parent.location.reload();
+                    }, 1500);
+                } else {
+                    layer.msg(data.msg);
+                }
+			 }
+		  })
+		  return false;
+	   });
+	});
+
+	;(function(){
+        //定义构造函数
+        var Upfile = function(ele,opt){
+            this.defaults = {
+                //elem:'#uploadPic' //绑定元素
+                elem:$(ele) //绑定元素
+                ,url:'{:url("upload/index")}'    //上传接口
+				,before:function(obj){}
+                ,done:function(res){}
+                ,error:function(res){}
+            }
+            this.options = $.extend({}, this.defaults ,opt);
+        };
+         
+        //定义方法
+        Upfile.prototype = {
+            init:function(){
+                var _this = this;
+                return layui.use('upload',function(){
+                    var upload = layui.upload;
+                     
+                    //执行实例
+                    var uploadInst = upload.render(_this.options);                     
+                });
+            }
+        };
+         
+        //在插件中使用对象
+        $.fn.upfile = function(options){
+            var upfile = new Upfile(this,options);
+            return upfile.init();
+        }
+    })();
+	$("#test").upfile({
+	   before: function(obj){
+          //预读本地文件示例，不支持ie8
+          obj.preview(function(index, file, result){
+             $('#demo').attr('src', result); //图片链接（base64）
+          });
+       },
+	   done: function(res){
+	      //如果上传失败
+          if(res.code > 0){
+             return _.m('上传失败',2,1000);
+          }
+          //上传成功
+		  $("input[name=config_logo]").val(res.detail[0]);
+	   },
+	   error:function(res){
+          //演示失败状态，并实现重传
+          var demoText = $('#demoText');
+          demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+          demoText.find('.demo-reload').on('click', function(){
+             uploadInst.upload();
+          });
+       }
+	});
+	$("#test2").upfile({
+	   before: function(obj){
+          //预读本地文件示例，不支持ie8
+          obj.preview(function(index, file, result){
+             $('#demo2').attr('src', result); //图片链接（base64）
+          });
+       },
+	   done: function(res){
+	      //如果上传失败
+          if(res.code > 0){
+             return _.m('上传失败',2,1000);
+          }
+          //上传成功
+		  $("input[name=website_logo]").val(res.detail[0]);
+	   },
+	   error:function(res){
+          //演示失败状态，并实现重传
+          var demoText = $('#demoText2');
+          demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+          demoText.find('.demo-reload').on('click', function(){
+             uploadInst.upload();
+          });
+       }
+	});
+	//普通图片上传
+       /*var uploadInst = upload.render({
+          elem: '#test'
+          ,url: '/admin.php/upload/index' //改成您自己的上传接口
+          ,before: function(obj){
+             //预读本地文件示例，不支持ie8
+             obj.preview(function(index, file, result){
+                $('#demo').attr('src', result); //图片链接（base64）
+             });
+          }
+          ,done: function(res){
+             //如果上传失败
+             if(res.code > 0){
+                return _.m('上传失败',2,1000);
+             }
+             //上传成功
+			 $("input[name=config_logo]").val(res.detail[0]);
+          }
+          ,error: function(){
+             //演示失败状态，并实现重传
+             var demoText = $('#demoText');
+             demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+             demoText.find('.demo-reload').on('click', function(){
+                uploadInst.upload();
+             });
+          }
+       });*/
+    </script>
+</html>

@@ -1,0 +1,462 @@
+<html>
+ <head>
+  <title>主页</title>
+  <link rel="stylesheet" type="text/css" href="__STATIC__/css/Admin_index.css">
+  <link rel="stylesheet" type="text/css" href="__STATIC__/lib/layui/css/layui.css">
+  <style>
+  .layui-nav-bar{height:0px;}
+  .layui-nav{padding:0px;}
+  .layui-nav-more{margin-right:20px;}
+  .layui-nav .layui-nav-child dd.layui-this a, .layui-nav-child dd.layui-this {background-color: #eee!important;}
+  .layui-nav-child a{color: #333!important;}
+  #Loading{position:fixed;top:0px;left:0px;background:black;width:100%;height:100%;z-index:1001;background:rgba(0,0,0,0.5);
+  text-align:center;display:none;}
+  </style>
+ </head>
+ <body>
+  <div class='box'>
+   <!--顶部-->
+   {include file='public/top'}
+   <!--顶部结束-->
+   <div class='con'>
+     <!--菜单栏-->
+     <div class='left'>
+	    {include file='public/menu'}
+	 </div>
+     <!--菜单栏结束-->
+
+	 <!--内容栏-->
+     <div class='right'>
+	    <div id='page-tab'>
+	       <button class="layui-icon layui-icon-prev tab-btn" id="page-prev"></button>
+	       <nav class='r_target'>
+		      <ul class='ul_option' id='ul_option'>
+		         <li data-src="main/home" style='width:80px;' onclick="back('main/home')"><b class="layui-icon layui-icon-home" style="font-size: 16px;"></b> &nbsp &nbsp首页</li>
+		      </ul>
+		   </nav>
+		   <button class="layui-icon layui-icon-next tab-btn" id="page-next"></button>
+		</div>
+
+		<div class='r_content'>
+		   <iframe frameborder="0" scrolling="yes" style="width:100%;height:100%;background:#fafafa;" id='r_iframe' class='r_iframe'></iframe>
+		</div>
+	 </div>
+     <!--内容栏结束-->
+   </div>
+   <div id='Overall'></div>
+   <div id="Loading"><i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop load"style="color:#fff;font-size:36px;"></i></div>
+   <!--网页完成-->
+  </div>
+
+  <script src="__STATIC__/js/jquery.js"></script>
+  <script src="__STATIC__/layer/layer.js"></script>
+  <script src="__STATIC__/lib/layui/layui.js"></script>
+  <script src="__STATIC__/js/func_layer.js"></script>
+  <script src="__STATIC__/js/func_library.js?id=12321312"></script>
+  <script>
+  layui.use(["element"],function(){
+     var element = layui.element;
+  })
+
+  window.login_top = function(){
+   	 _.ts('您的登录已过期，请先登录！',function(){
+	   location.href='/admin.php/login';
+	 },function(){
+       location.href='/admin.php/login';
+     });
+  }
+
+  $(function(){
+	//判断cookie
+	var menu=document.cookie.indexOf("default_menu=");//查看cookie是否存在,菜单栏选中
+	var nav=document.cookie.indexOf("default_nav=");//导航栏选中
+	var target=document.cookie.indexOf("default_target=");//iframe栏数据 名字
+	var target=document.cookie.indexOf("default_target2=");//iframe栏数据 地址
+	var gaga=document.cookie.indexOf("default_gaga=");//iframe数据id
+	var boolk=document.cookie.indexOf("default_boolk=");//存储固定菜单栏数据
+	var menu_all=0;
+
+	//top部分
+    //鼠标悬停
+	$(".top .top_choice li").hover(function(){
+	   $(this).find('a').css("color","#fff");
+	},function(){
+	   $(this).find('a').css("color","#ddd");
+	});
+    
+   //top 安全退出，访问首页，管理员信息
+   $("li[data-src='solution_user'],li[data-src='turn_index'],li[data-src='admin_user']").click(function(){
+       var variable=$(this).attr('data-src');
+       if(variable == 'solution_user'){
+	       _.ts('确定要退出吗？',function(){
+		       location.href='{:url("admin/logout")}';
+		   });
+	   }else if(variable == 'turn_index'){
+	       location.href = $(this).find('a').attr('href');
+	   }else if(variable == 'admin_user'){
+	  
+	   }
+   })
+   //修改密码，清理日志，清理菜单缓存
+   $("a[data-src='journal'],a[data-src='menu_cache']").click(function(){
+	  $("#Loading").css("display","block");
+      var variable = $(this).attr("data-src");
+	  var name = '';
+	  if(variable == 'journal'){
+	     name = "clear_cache";
+	  }else if(variable == 'menu_cache'){
+	   	 name = "DeleteAllCookies";
+	  }
+	  $.ajax({
+	   	 type: 'post',
+		 url: "{:url('admin/hardware_cache')}",
+		 data: {name:name},
+		 dataType: 'json',
+		 success: function(data){
+		    if (data.code == 1) {
+			   $("#Loading").css("display","none");
+               if (data.url) {
+                  layer.msg(data.msg + ' 页面即将自动跳转~');
+               } else {
+                  layer.msg(data.msg);
+               }
+               setTimeout(function() {
+                  if (data.url) {
+                     location.href = data.url;
+                  } else {
+                     location.reload();
+                  }
+               }, 1500);
+            } else {
+               layer.msg(data.msg);
+               setTimeout(function() {
+                  if (data.url) {
+                     location.href = data.url;
+                  }
+               }, 1500);
+            }
+	   	 }
+      });
+   })
+
+	//固定菜单栏部分
+	var tem=" layui-icon-spread-left";
+	$("#wrap-absu i").addClass(tem);
+	__.setCookie('default_book',tem);
+
+    $(".left #wrap-absu").click(function(){
+	   var lay_right=" layui-icon-shrink-right";
+	   var tems=$(this).find('i').attr('class');  
+	   tems=tems.replace(/layui-icon/, "");
+       
+	   if(tems==tem){
+	      $(".left .menu-aggregate").css('width','220');
+	      $(".left .menu-aggregate .menu-wrap").css('width','220');
+		  //移出上次的class
+		  $("#wrap-absu i").removeClass(tem);
+		  //新添加的class
+		  $("#wrap-absu i").addClass(lay_right);
+          /* 加载全局菜单 */
+          
+		  if(menu_all===0){
+			document.getElementById('menu_all').style.cssText="display:block;";
+            _.a("{:url('admin/menu_all')}",{tid:true},function(res){
+		      if(res.status=='ok'){
+			    var str='',len,variable=0;
+			    len=(res.data).length;
+			    for(var i=0;i<len;i++){
+			      var p=res.data[i];
+                  str += "<li data-src='"+p.sy_name+"'><a><i class='layui-icon "+p.sy_icon+"'></i><span class='nav-text'>"+p.sy_title+"</span></a></li>";
+				
+				  for(var a in res.data[i]){
+			        if(parseInt(a) || parseInt(a)==0){
+				      variable++;
+				    }
+			      }
+                        
+			      for( j=0; j<variable; j++){
+                    if(res.data[i][j] != undefined){
+				      //var lens = Object.keys(res.data[i]).length;
+				      var ps=res.data[i][j];
+				      var cla='';
+				      if(j==0){
+				        cla='darkerlishadow';
+				      }else if(j == variable-1){
+				        cla='darkerlishadowdown';
+				      }
+				      str +="<li data-src='"+ps.sy_name+"' class='darkerli "+cla+"'><a><i class='layui-icon "+ps.sy_icon+"'></i><span class='nax-text'> "+ps.sy_title+"</span></a></li>";
+				    }
+			      }
+			    }
+			    $('.menu ul').append(str);//向类cells里面添加元素
+			    
+			    __.target();
+			    menu_all++;
+				_.m('已成功导入',1,3000);
+			  }else if(res.msg){
+				login_top();	
+			  }else{
+			    _.m(res.status,3,3000);
+			  }
+		    })
+            
+		  }
+		  //加上一个200毫秒的定时器，目的是让文字延迟显示,隐藏加载图标
+		  setTimeout(function(){
+		    $(".left .lic_h3").css('display','block');
+		    document.getElementById('menu_all').style.cssText="display:none;";
+		  },'200');
+	   }else{
+		  $(".left .lic_h3").css('display','none');
+	      $(".left .menu-aggregate").css('width','0');
+	      $(".left .menu-aggregate .menu-wrap").css('width','0');
+		  $("#wrap-absu i").removeClass(lay_right);
+		  $("#wrap-absu i").addClass(tem);
+	   }
+	   
+	})
+	//固定菜单栏部分 结束
+    
+	//选项卡左右移动设置
+	var scrollSetp = 500,
+	//在这个的一个方位内移动
+    operationWidth = 70,
+    //相对于网页，选项卡显示的第一个tab为准，到最左边的网页的距离
+    leftOperationWidth = $('.left').width()+$('.tab-btn').outerWidth();
+	//选项卡左右移动所需的时间
+    animatSpeed = 150;
+	//点击右边的按钮执行
+	$("#page-next").click(function(){
+	   var nav = $("#ul_option");
+       var left = parseInt(nav.css("margin-left"));//margin-left距离
+       var wwidth = parseInt($("#page-tab").width());//选项卡总width
+       var navwidth = parseInt(nav.width());//选项卡（不包括左右移动图标）width
+       var allshowleft = -(navwidth - wwidth + operationWidth);
+       if (allshowleft !== left && navwidth > wwidth - operationWidth) {
+          var temp = (left - scrollSetp);
+          nav.animate({
+             "margin-left": (temp < allshowleft ? allshowleft: temp) + "px"
+          },animatSpeed)
+       }
+	})
+	//点击左边的按钮执行
+	$("#page-prev").click(function(){
+       var nav = $(".ul_option");
+       var left = parseInt(nav.css("margin-left"));
+       if (left !== 0) {
+          nav.animate({
+             "margin-left": (left + scrollSetp > 0 ? 0 : (left + scrollSetp)) + "px"
+		  },animatSpeed)   
+       }
+	})
+	//想在选项卡中添加一个新的tab，执行这个函数
+	window.createmove = function() {
+		//点击菜单加载进选项卡
+        var nav = $("#ul_option");
+        var wwidth = parseInt($("#page-tab").width());
+        var navwidth = parseInt(nav.width());
+        if (wwidth - operationWidth < navwidth) {
+            nav.animate({
+                "margin-left": "-" + (navwidth - wwidth + operationWidth) + "px"
+            },
+            animatSpeed)
+        }
+    }
+	//选项卡中存在tab，执行move函数
+	window.move = function(selDom) {
+		//列显示函数
+        var nav = $("#ul_option");
+		//获取的 li 偏移量
+        var releft = selDom.offset().left;
+        //选项卡总宽
+		var wwidth = parseInt($("#page-tab").width());
+        //ul的margin-left
+        var left = parseInt(nav.css("margin-left"));
+        if (releft < leftOperationWidth && releft <= wwidth) {
+            nav.animate({
+                "margin-left": (left - releft + leftOperationWidth) + "px"
+            },
+            animatSpeed)
+			
+        } else {
+            left=left+leftOperationWidth;
+            if (releft + selDom.width() > wwidth - operationWidth + leftOperationWidth) {
+                nav.animate({
+                    "margin-left": (left - releft + wwidth - selDom.width() - operationWidth) + "px"
+                },
+                animatSpeed);
+            }
+        }
+    }
+	//选项卡左右移动设置 结束
+    
+	//menu小于0表示cookie不存在，不存在则设置默认的值
+    if(menu<0){
+	   __.setCookie('default_menu','main/home');
+	}
+
+	if(nav<0){
+	   __.setCookie('default_nav',"0");
+	}
+
+	if(target<0 || __.getCookie('default_gaga') > 40){
+	   __.setCookie('default_gaga',"0");
+	}
+    //循环选项卡中的tab选项
+	if(target>-1 && __.getCookie('default_target').length>2){
+
+	   var reg = new RegExp("首页,","g");
+	   var reg2 = new RegExp("main/home,","g");
+
+       //名字
+	   window.arr=__.getCookie('default_target').replace(reg,"").split(',');
+
+       //地址
+	   window.arr2=__.getCookie('default_target2').replace(reg2,"").split(',');
+	   
+	   for(var i=0;i<arr.length;i++){
+          if(arr[i]==' '){
+		     arr=_.remove(arr[i]);
+			 arr2=_.remove(arr2[i]);
+		  }
+		  var p=__.getCookie('default_gaga');
+		  var ling=__.getCookie('default_gaga');
+		  ++ling;
+	      $('.right .r_target ul').append("<li data-src='"+arr2[i]+"' id='i_judge"+p+"'><span onclick=\"back('"+arr2[i]+"')\">"+arr[i]+"</span><i class='layui-icon layui-icon-close'style='float:right;'onclick=\"i_dele('i_judge"+p+"','"+arr[i]+"','"+arr2[i]+"')\"></i></li>");
+		  __.setCookie('default_gaga',ling);
+		  
+	   }
+	}
+	//循环选项卡中的tab选项 结束
+
+	if(__.getCookie('default_nav') <= '0'){
+       $("li[tid='"+{$menu[0]['sy_id']}+"']").addClass('curr');//加载导航栏选中,小于零表示默认值
+	}else{
+       $("li[tid='"+__.getCookie('default_nav')+"']").addClass('curr');//加载导航栏选中
+	}
+
+    //默认显示页面
+	//if(__.getCookie('default_menu').length>'5'){
+    /*if(__.getCookie('default_menu').substring(__.getCookie('default_menu').length-4)=='html'){
+	  $("iframe").attr("src",__.getCookie('default_menu'));
+	}else{*/
+	  //alert(__.getCookie('default_menu'));
+      $("iframe").attr("src","/admin.php/"+__.getCookie('default_menu'));
+	//}
+	//}
+	//默认选项卡
+	$(".r_target li[data-src='"+__.getCookie('default_menu')+"'],.r_target dd[data-src='"+__.getCookie('default_menu')+"']").addClass('cauur');
+
+	window.tid=__.getCookie('default_nav');
+	if(tid){
+	   __.tebie(tid,{$menu[0]['sy_id']});
+	}
+	
+	//显示导航
+    $('.navchild').click(function(){
+	    //选择所有的class='curr'的对象，并将curr类选择器移走
+        $('.curr').removeClass('curr');
+        //为点击的导航栏添加类curr
+        $(this).addClass('curr');
+	    //获取点击导航的tid属性
+        window.tid = $(this).attr('tid');
+	    __.tebie(tid,{$menu[0]['sy_id']}); 
+	})
+    
+	//显示内容页面
+	window.back=function(name){
+	   //alert(123);
+	   _.m('正在加载...',16,20000);
+	   var varable = login_ajax();
+	   if(!varable){
+	       return 0;
+	   }
+	   $('.menus').removeClass('menus');
+
+	   $("iframe").attr("src","/admin.php/"+name);
+	   var iframe = document.getElementById("r_iframe");
+       if(iframe.attachEvent){
+          iframe.attachEvent("onreadystatechange", function() {
+             //此事件在内容没有被载入时候也会被触发，所以我们要判断状态
+             //有时候会比较怪异 readyState状态会跳过 complete 所以我们loaded状态也要判断
+             if (iframe.readyState === "complete" || iframe.readyState == "loaded") { 
+                //代码能执行到这里说明已经载入成功完毕了
+                //要清除掉事件
+                iframe.detachEvent("onreadystatechange", arguments.callee);
+                //这里是回调函数
+				_.q();
+             }
+          });
+       }else{
+          iframe.addEventListener("load", function() {
+             //代码能执行到这里说明已经载入成功完毕了
+             this.removeEventListener("load", arguments.call, false);
+             //这里是回调函数
+			 _.q();
+          }, false);
+       }
+       //更新显示页面
+	   __.setCookie("default_menu",name);
+	   //给本内容的进程添加选中
+	   $('.cauur').removeClass('cauur');
+	   $(".r_target li[data-src='"+name+"']").addClass('cauur');
+	   //添加class
+	   __.addClass(name);
+	   return true;
+	}
+
+    //删除选项栏
+    window.i_dele=function(id,value,name){
+	   var arr=__.getCookie('default_target').split(',');
+       var arr2=__.getCookie('default_target2').split(',');
+	   arr.remove(value);
+	   arr2.remove(name);
+
+	   __.setCookie('default_target',arr.join(','));
+	   __.setCookie('default_target2',arr2.join(','));
+       
+	   if(name == __.getCookie('default_menu')){
+	      __.setCookie('default_menu',"main/home");
+	      $(".r_target li[data-src='"+__.getCookie('default_menu')+"']").addClass('cauur');
+	      $("iframe").attr("src","{:url('main/home')}");
+		  $(".menus").removeClass("menus");
+	   }
+       $("#"+id).remove();
+    }
+
+	window.login_ajax=function(){
+		var variable = 1;
+	    $.ajax({
+			type:'post',
+			url:'{:url("admin/menu_all")}',
+			data:{tid:true},
+			dataType:'json',
+			success:function(res){
+			    if(res.msg){
+	                login_top();
+		   	        variable = '';
+	   	        }
+			}
+		})
+		return variable;
+	}
+    
+	//首先可以给JS的数组对象定义一个函数，用于查找指定的元素在数组中的位置
+    Array.prototype.indexOf = function(val) {
+       for (var i = 0; i < this.length; i++) { 
+         if (this[i] == val) return i; 
+       }   
+       return -1; 
+    }
+	//然后使用通过得到这个元素的索引，使用js数组自己固有的函数去删除这个元素
+	Array.prototype.remove = function(val) { 
+       var index = this.indexOf(val); 
+         if (index > -1) { 
+           this.splice(index, 1); 
+       }  
+    }
+  });
+
+  </script>
+ </body>
+</html>

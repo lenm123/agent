@@ -1,0 +1,89 @@
+<script type="text/javascript" src="__STATIC__/home/JS/jquery-2.2.3.min.js"></script>
+<!-- //js -->
+<!-- simpleLightbox -->
+<script src="__STATIC__/home/JS/simpleLightbox.js"></script>
+<script>
+    $('.proj_gallery_grid a').simpleLightbox();
+</script>
+<!-- //simpleLightbox -->
+<!-- flexSlider -->
+<script defer="" src="__STATIC__/home/JS/jquery.flexslider.js"></script>
+<script src="__STATIC__/lib/layui/layui.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("li[active-data={$active}]").addClass("active");
+        $(".login").hover(function(){
+            $(this).css("background","#000");
+            $(this).find("a").css("color","#fff");
+        },function(){
+            $(this).css("background","#fff");
+            $(this).find("a").css("color","#000");
+        });
+    });
+
+    $(window).load(function(){
+        $('.flexslider').flexslider({
+            animation: "slide",
+            start: function(slider){
+                $('body').removeClass('loading');
+            }
+        });
+    });
+
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+</script>
+
+<!-- //flexSlider -->
+
+<!-- stats -->
+<script src="__STATIC__/home/JS/jquery.waypoints.min.js"></script>
+<script src="__STATIC__/home/JS/jquery.countup.js"></script>
+<script>
+    $('.counter').countUp();
+</script>
+<!-- //stats -->
+<!-- /js files -->
+<link href="__STATIC__/home/CSS/aos.css" rel="stylesheet prefetch" type="text/css" media="all">
+<link href="__STATIC__/home/CSS/aos-animation.css" rel="stylesheet prefetch" type="text/css" media="all">
+<script src="__STATIC__/home/JS/aos.js"></script>
+<script src="__STATIC__/home/JS/aosindex.js"></script>
+<!-- //js files -->
+<!-- start-smoth-scrolling -->
+<script type="text/javascript" src="__STATIC__/home/JS/move-top.js"></script>
+<script type="text/javascript" src="__STATIC__/home/JS/easing.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+            $('html,body').animate({
+                scrollTop: $(this.hash).offset().top
+            }, 900);
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        /*
+                                var defaults = {
+                                      containerID: 'toTop', // fading element id
+                                    containerHoverID: 'toTopHover', // fading element hover id
+                                    scrollSpeed: 1200,
+                                    easingType: 'linear'
+                                 };
+                                */
+
+        $().UItoTop({
+            easingType: 'easeOutQuart'
+        });
+
+    });
+</script>
+
+<a href="#home" class="scroll" id="toTop" style="display: block;"><span id="toTopHover" style="opacity: 0;"></span>
+    <span id="toTopHover" style="opacity: 1;"> </span>
+</a>
+<script src="//at.alicdn.com/t/font_1842848_byyc16wu4yw.js"></script>
+<script type="text/javascript" src="__STATIC__/home/JS/tether.min.js"></script>
+<script type="text/javascript" src="__STATIC__/home/JS/bootstrap.min.js"></script>

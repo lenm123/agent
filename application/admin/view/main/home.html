@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>欢迎页面-X-admin2.2</title>
+        {include file="public/childhead"}
+		<script src="__STATIC__/js/jquery.js"></script>
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="stylesheet" href="/static/lib/layui/css/layui.css">
+    </head>
+    <body style='padding:15px 0px'>
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body ">
+                            <blockquote class="layui-elem-quote">欢迎{$role.ro_name}：
+                                <span class="x-red">{$name.ai_name}</span>,
+								<span id='time'></span>
+								<span style='float:right;font-size:14px;'>当前时间: <i id="times"></i></span>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">数据统计</div>
+                        <div class="layui-card-body ">
+                            <ul class="layui-row layui-col-space10 layui-this x-admin-carousel x-admin-backlog">
+                                <li class="layui-col-md2 layui-col-xs6">
+                                    <a href="javascript:;" class="x-admin-backlog-body">
+                                        <h3>文章数</h3>
+                                        <p>
+                                            <cite>66</cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md2 layui-col-xs6">
+                                    <a href="javascript:;" class="x-admin-backlog-body">
+                                        <h3>会员数</h3>
+                                        <p>
+                                            <cite>12</cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md2 layui-col-xs6">
+                                    <a href="javascript:;" class="x-admin-backlog-body">
+                                        <h3>回复数</h3>
+                                        <p>
+                                            <cite>99</cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md2 layui-col-xs6">
+                                    <a href="javascript:;" class="x-admin-backlog-body">
+                                        <h3>商品数</h3>
+                                        <p>
+                                            <cite>67</cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md2 layui-col-xs6">
+                                    <a href="javascript:;" class="x-admin-backlog-body">
+                                        <h3>文章数</h3>
+                                        <p>
+                                            <cite>67</cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md2 layui-col-xs6 ">
+                                    <a href="javascript:;" class="x-admin-backlog-body">
+                                        <h3>文章数</h3>
+                                        <p>
+                                            <cite>6766</cite></p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md3">
+                    <div class="layui-card">
+                        <div class="layui-card-header">下载
+                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>
+                        <div class="layui-card-body  ">
+                            <p class="layuiadmin-big-font">33,555</p>
+                            <p>新下载
+                                <span class="layuiadmin-span-color">10%
+                                    <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md3">
+                    <div class="layui-card">
+                        <div class="layui-card-header">下载
+                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>
+                        <div class="layui-card-body ">
+                            <p class="layuiadmin-big-font">33,555</p>
+                            <p>新下载
+                                <span class="layuiadmin-span-color">10%
+                                    <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md3">
+                    <div class="layui-card">
+                        <div class="layui-card-header">下载
+                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>
+                        <div class="layui-card-body ">
+                            <p class="layuiadmin-big-font">33,555</p>
+                            <p>新下载
+                                <span class="layuiadmin-span-color">10%
+                                    <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md3">
+                    <div class="layui-card">
+                        <div class="layui-card-header">下载
+                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>
+                        <div class="layui-card-body ">
+                            <p class="layuiadmin-big-font">33,555</p>
+                            <p>新下载
+                                <span class="layuiadmin-span-color">10%
+                                    <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">系统信息</div>
+                        <div class="layui-card-body ">
+                            <table class="layui-table">
+                                <tbody>
+                                    <tr>
+                                        <th>当前版本版本</th>
+                                        <td>1.0.180420</td></tr>
+                                    <tr>
+                                        <th>服务器地址</th>
+                                        <td>{$sys_info.domain}</td></tr>
+                                    <tr>
+                                        <th>操作系统</th>
+                                        <td>{$sys_info.os}</td></tr>
+                                    <tr>
+                                        <th>运行环境</th>
+                                        <td>{$sys_info.web_server}</td></tr>
+                                    <tr>
+                                        <th>PHP版本</th>
+                                        <td>{$sys_info.phpv}</td></tr>
+                                    <tr>
+                                        <th>PHP运行方式</th>
+                                        <td>{$sys_info.sapi}</td></tr>
+                                    <tr>
+                                        <th>MYSQL版本</th>
+                                        <td>{$sys_info.mysql_version}</td></tr>
+                                    <tr>
+                                        <th>ThinkPHP</th>
+                                        <td>{$Think.VERSION}</td></tr>
+                                    <tr>
+                                        <th>上传附件限制</th>
+                                        <td>{$sys_info.fileupload}</td></tr>
+                                    <tr>
+                                        <th>服务器时间</th>
+                                        <td>{$sys_info.time}</td></tr>
+									<tr>
+                                        <th>最大执行时间</th>
+                                        <td>{$sys_info.set_time_limit}</td></tr>
+                                    <tr>
+                                        <th>剩余空间</th>
+                                        <td>{$sys_info.remaining_space}</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">开发团队</div>
+                        <div class="layui-card-body ">
+                            <table class="layui-table">
+                                <tbody>
+                                    <tr>
+                                        <th>版权所有</th>
+                                        <td>{$config.config_copyright}
+                                            <!--<a href="http://x.xuebingsi.com/" target="_blank">访问官网</a></td>-->
+                                    </tr>
+                                    <tr>
+                                        <th>开发者</th>
+                                        <td>{$config.config_development}({$config.website_email})</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <style id="welcome_style"></style>
+                <div class="layui-col-md12">
+                    <blockquote class="layui-elem-quote layui-quote-nm">感谢layui,百度Echarts,jquery,本系统由x-admin提供技术支持。</blockquote></div>
+            </div>
+        </div>
+        </div>
+    </body>
+	<script>
+	  now = new Date(),hour = now.getHours(),str=''; 
+      if(hour < 6){
+		str = "凌晨好！";
+	  }else if (hour < 9){
+		str = "早上好！";
+	  }else if (hour < 12){
+		str = "上午好！";
+	  }else if (hour < 14){
+		str = "中午好！";
+	  }else if (hour < 17){
+		str = "下午好！";
+	  }else if (hour < 19){
+		str = "傍晚好！";
+	  }else if (hour < 22){
+		str = "晚上好！";
+	  }else {
+		str = "夜里好！";
+	  }
+	  document.getElementById('time').innerHTML=str;
+	  $(function () {
+         setInterval("GetTime()", 1000);
+      });
+      //获取时间并设置格式
+      function GetTime() {
+         var mon, day, now, hour, min, ampm, time, str, tz, end, beg, sec;
+         /*
+         mon = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+                 "Sep", "Oct", "Nov", "Dec");
+         */
+         mon = new Array("一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月",
+                 "九月", "十月", "十一月", "十二月");
+         /*
+        day = new Array("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+         */
+         day = new Array("周日", "周一", "周二", "周三", "周四", "周五", "周六");
+         now = new Date();
+         hour = now.getHours();
+         min = now.getMinutes();
+         sec = now.getSeconds();
+         if (hour < 10) {
+             hour = "0" + hour;
+         }
+         if (min < 10) {
+             min = "0" + min;
+         }
+         if (sec < 10) {
+             sec = "0" + sec;
+         }
+         $("#times").html(
+             now.getFullYear() + "年" + (now.getMonth() + 1) + "月" + now.getDate() + "日" + "  " + hour + ":" + min + ":" +sec
+         );
+     }
+	</script>
+</html>
